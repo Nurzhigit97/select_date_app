@@ -18,6 +18,9 @@ class EventsSuccess extends EventState {
 }
 
 class EventsError extends EventState {
-  final String error;
+  final DioException error;
   const EventsError({required this.error});
+
+  @override
+  List<Object> get props => [error];
 }

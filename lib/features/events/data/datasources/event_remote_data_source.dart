@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:select_date_app/features/events/data/models/event_model.dart';
+import 'package:select_date_app/features/events/domain/usecases/get_event/get_event_params.dart';
+import 'package:select_date_app/shared/core/helper/extenstions.dart';
 import 'package:select_date_app/shared/core/resources/data/data_state.dart';
 
 abstract class EventRemoteDataSource {
-  Future<DataState<List<EventModel>>> getEvents(DateTimeRange? dateRange);
+  Future<DataState<List<EventModel>>> getEvents(GetEventsParams params);
 }
 
 class EventRemoteDataSourceImpl implements EventRemoteDataSource {
@@ -13,18 +13,14 @@ class EventRemoteDataSourceImpl implements EventRemoteDataSource {
   EventRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<DataState<List<EventModel>>> getEvents(
-    DateTimeRange? dateRange,
-  ) async {
+  Future<DataState<List<EventModel>>> getEvents(GetEventsParams params) async {
     try {
       final response = await dio.get(
         "test-task",
         queryParameters: {
-          "start_date": DateFormat(
-            "dd-MM-yyyy",
-          ).format(dateRange?.start ?? DateTime.now()),
-          if (dateRange?.end != null)
-            "end_date": DateFormat("dd-MM-yyyy").format(dateRange!.end),
+          "start_date": params.startDate.formatDate(dateFormat: "dd-MM-yyyy"),
+          if (params.endDate != null)
+            "end_date": params.endDate?.formatDate(dateFormat: "dd-MM-yyyy"),
         },
       );
 

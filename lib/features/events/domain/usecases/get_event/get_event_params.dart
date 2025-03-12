@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 class GetEventsParams extends Equatable {
-  final DateTimeRange? dateRange;
+  final DateTime startDate;
+  final DateTime? endDate;
 
-  const GetEventsParams({this.dateRange});
+  const GetEventsParams({required this.startDate, this.endDate});
 
   @override
-  List<Object?> get props => [dateRange];
+  List<Object?> get props => [startDate, endDate];
 }

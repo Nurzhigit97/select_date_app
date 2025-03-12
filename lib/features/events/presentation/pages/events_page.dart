@@ -16,16 +16,14 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   final dateController = TextEditingController();
 
-  final DateTimeRange _dateRange = DateTimeRange(
-    start: DateTime.now(),
-    end: DateTime.now().add(const Duration(days: 7)),
-  );
+  DateTime? startDate;
+  DateTime? endDate;
 
   List<EventEntity> events = [];
 
   @override
   void initState() {
-    context.read<EventCubit>().getEvents(dateRange: _dateRange);
+    context.read<EventCubit>().getEvents(startDate: DateTime.now());
     super.initState();
   }
 
@@ -38,22 +36,13 @@ class _EventsPageState extends State<EventsPage> {
         child: Column(
           children: [
             CalendarDialogWidget(
-              initialDateRange: _dateRange,
-              onDateRangeSelected: (dateRange) {
-                if (dateRange.start == dateRange.end) {
-                  dateRange = DateTimeRange(
-                    start: dateRange.start,
-                    end: dateRange.start.add(const Duration(days: 7)),
-                  );
-                } else if (dateRange.end.isBefore(
-                  dateRange.start.add(const Duration(days: 7)),
-                )) {
-                  dateRange = DateTimeRange(
-                    start: dateRange.start,
-                    end: dateRange.start.add(const Duration(days: 7)),
-                  );
-                }
-                context.read<EventCubit>().getEvents(dateRange: dateRange);
+              startDate: startDate ?? DateTime.now(),
+
+              onDateRangeSelected: (startDate, endDate) {
+                context.read<EventCubit>().getEvents(
+                  startDate: startDate,
+                  endDate: endDate,
+                );
               },
             ),
 
@@ -62,13 +51,16 @@ class _EventsPageState extends State<EventsPage> {
             BlocConsumer<EventCubit, EventState>(
               listener: (context, state) {
                 if (state is EventsSuccess) {
-                  setState(() {
-                    events = state.events;
-                  });
+                  events = state.events;
                 } else if (state is EventsError) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.error)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        state.error.response?.data['message']['end_date'][0] ??
+                            "",
+                      ),
+                    ),
+                  );
                 }
               },
               builder: (context, state) {

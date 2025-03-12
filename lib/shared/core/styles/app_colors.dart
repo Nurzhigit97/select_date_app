@@ -28,7 +28,6 @@ class AppColors {
   static const Color grey63 = Color(0xff636363);
   static const Color homeGreenColor = Color(0xff00FF0A);
   static const Color greenBorder = Color(0xff00CC08);
-  static const Color redNotifications = Color(0xffDD0639);
   static Color green1 = const Color(0xFF00CC08);
 
   static Color red1 = const Color(0xFFE60000);
@@ -69,48 +68,44 @@ class AppColors {
 
   static List<Color> gradientColorsOrange = [
     const Color(0xFFFE9202),
-    const Color(0xFFEB510B)
+    const Color(0xFFEB510B),
   ];
   static List<Color> gradientColorsYellow = [
     const Color(0xFFFFE64E),
-    const Color(0xFFEDAF00)
+    const Color(0xFFEDAF00),
   ];
 
   static List<Color> gradientColorsGreen = [
     const Color(0xFF459654),
-    const Color(0xFF64B567)
+    const Color(0xFF64B567),
   ];
   static List<Color> gradientColorsBlue = [
     const Color(0xFF01512C),
-    const Color(0xFF69BA6A)
+    const Color(0xFF69BA6A),
   ];
 
-  static const MaterialColor primary = MaterialColor(
-    _primaryPrimaryValue,
-    <int, Color>{
-      50: Color(0xFFE0F2FF),
-      100: Color(0xFFB3D5FF),
-      200: Color(0xFF80B8FF),
-      300: Color(0xFF4D9CFF),
-      400: Color(0xFF269FFF),
-      500: Color(_primaryPrimaryValue),
-      600: Color(0xFF0056D2),
-      700: Color(0xFF004BBA),
-      800: Color(0xFF0041A2),
-      900: Color(0xFF003A8B),
-    },
-  );
+  static const MaterialColor primary =
+      MaterialColor(_primaryPrimaryValue, <int, Color>{
+        50: Color(0xFFE0F2FF),
+        100: Color(0xFFB3D5FF),
+        200: Color(0xFF80B8FF),
+        300: Color(0xFF4D9CFF),
+        400: Color(0xFF269FFF),
+        500: Color(_primaryPrimaryValue),
+        600: Color(0xFF0056D2),
+        700: Color(0xFF004BBA),
+        800: Color(0xFF0041A2),
+        900: Color(0xFF003A8B),
+      });
   static const int _primaryPrimaryValue = 0xFF0062F5;
 
-  static const MaterialColor primaryAccent = MaterialColor(
-    _primaryAccentValue,
-    <int, Color>{
-      100: Color(0xFF99D3FF),
-      200: Color(_primaryAccentValue),
-      400: Color(0xFF33A5FF),
-      700: Color(0xFF008CFF),
-    },
-  );
+  static const MaterialColor primaryAccent =
+      MaterialColor(_primaryAccentValue, <int, Color>{
+        100: Color(0xFF99D3FF),
+        200: Color(_primaryAccentValue),
+        400: Color(0xFF33A5FF),
+        700: Color(0xFF008CFF),
+      });
   static const int _primaryAccentValue = 0xFF66B2FF;
 
   static List<String> productColors = [
