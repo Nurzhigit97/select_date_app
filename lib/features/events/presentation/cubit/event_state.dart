@@ -12,7 +12,7 @@ class EventsInitial extends EventState {}
 class EventsLoading extends EventState {}
 
 class EventsSuccess extends EventState {
-  final List<EventModel> events;
+  final List<EventEntity> events;
 
   const EventsSuccess({required this.events});
 }

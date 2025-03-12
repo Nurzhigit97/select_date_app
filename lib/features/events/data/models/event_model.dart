@@ -1,11 +1,10 @@
-class EventModel {
-  final String eventName;
-  final String description;
-  final String date;
-  EventModel({
-    required this.eventName,
-    required this.description,
-    required this.date,
+import 'package:select_date_app/features/events/domain/entity/event_entity.dart';
+
+class EventModel extends EventEntity {
+  const EventModel({
+    required super.eventName,
+    required super.description,
+    required super.date,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) {

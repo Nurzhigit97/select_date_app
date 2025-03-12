@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:select_date_app/features/events/data/models/event_model.dart';
+import 'package:select_date_app/features/events/domain/entity/event_entity.dart';
 import 'package:select_date_app/features/events/domain/repositories/events_repository.dart';
 import 'package:select_date_app/shared/core/resources/data/data_state.dart';
 

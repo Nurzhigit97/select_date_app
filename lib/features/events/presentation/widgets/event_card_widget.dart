@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:select_date_app/features/events/data/models/event_model.dart';
+import 'package:select_date_app/features/events/domain/entity/event_entity.dart';
 import 'package:select_date_app/shared/core/styles/app_colors.dart';
 
 class EventCardWidget extends StatelessWidget {
-  final EventModel event;
+  final EventEntity event;
 
   const EventCardWidget({super.key, required this.event});
 

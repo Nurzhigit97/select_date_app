@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:select_date_app/features/events/data/models/event_model.dart';
+import 'package:select_date_app/features/events/domain/entity/event_entity.dart';
 import 'package:select_date_app/features/events/presentation/cubit/event_cubit.dart';
 import 'package:select_date_app/features/events/presentation/widgets/calendars/calendar_dialog_widget.dart';
 import 'package:select_date_app/features/events/presentation/widgets/event_card_widget.dart';
@@ -21,7 +21,7 @@ class _EventsPageState extends State<EventsPage> {
     end: DateTime.now().add(const Duration(days: 7)),
   );
 
-  List<EventModel> events = [];
+  List<EventEntity> events = [];
 
   @override
   void initState() {
