@@ -46,17 +46,14 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
         final startDay = _selectedDays.first;
 
         if (selectedDay.isBefore(startDay)) {
-          // Если выбрали дату раньше первой — меняем местами
           _selectedDays
             ..clear()
             ..add(selectedDay)
             ..add(startDay);
         } else {
-          // Добавляем конечную дату
           _selectedDays.add(selectedDay);
         }
       } else {
-        // Если уже 2 даты выбраны, очищаем и начинаем заново
         _selectedDays
           ..clear()
           ..add(selectedDay);
@@ -119,10 +116,8 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
                 if (_selectedDays.isNotEmpty) {
                   final sortedDays = _selectedDays.toList()..sort();
 
-                  // Get the start date
                   final startDate = sortedDays[0];
 
-                  // Get the end date only if there is a second date selected
                   final endDate = sortedDays.length > 1 ? sortedDays[1] : null;
 
                   context.read<EventCubit>().getEvents(
