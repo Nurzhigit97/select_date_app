@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:select_date_app/features/events/presentation/widgets/app_button_widget.dart';
-import 'package:select_date_app/features/events/presentation/widgets/app_input_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:select_date_app/features/events/presentation/cubit/event_cubit.dart';
+import 'package:select_date_app/shared/core/resources/widgets/app_button_widget.dart';
+import 'package:select_date_app/shared/core/resources/widgets/app_input_widget.dart';
 import 'package:select_date_app/features/events/presentation/widgets/calendars/custom_calendar_widget.dart';
 import 'package:select_date_app/shared/core/helper/extenstions.dart';
 import 'package:select_date_app/shared/core/styles/app_colors.dart';
 
 class CalendarDialogWidget extends StatefulWidget {
-  final DateTimeRange? initialDateRange;
-  final Function(DateTimeRange)? onDateRangeSelected;
+  final DateTime startDate;
+  final DateTime? endDate;
+  final Function(DateTime, DateTime)? onDateRangeSelected;
 
   const CalendarDialogWidget({
     super.key,
-    this.initialDateRange,
+    required this.startDate,
+    this.endDate,
     this.onDateRangeSelected,
   });
 
@@ -29,30 +33,41 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
   }
 
   void _initializeSelectedDays() {
-    if (widget.initialDateRange != null) {
-      _selectedDays
-        ..clear()
-        ..add(widget.initialDateRange!.start); // Только startDate
-    }
+    _selectedDays
+      ..clear()
+      ..add(widget.startDate);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
-      // Если не выбран ни один день, то добавляем startDate
       if (_selectedDays.isEmpty) {
         _selectedDays.add(selectedDay);
-      }
-      // Если уже выбран startDate, то добавляем endDate (или заменяем его)
-      else if (_selectedDays.length == 1) {
+      } else if (_selectedDays.length == 1) {
         final startDay = _selectedDays.first;
-        // Если выбран день до startDate, то обновляем его
+
         if (selectedDay.isBefore(startDay)) {
-          _selectedDays.clear();
-          _selectedDays.add(selectedDay); // Перезаписываем startDate
-        } else if (!selectedDay.isAtSameMomentAs(startDay)) {
-          // Если выбран день после startDate, то добавляем его как endDate
+          _selectedDays
+            ..clear()
+            ..add(selectedDay);
+        } else if (selectedDay.isAtSameMomentAs(startDay)) {
+          // No change
+        } else if (selectedDay.difference(startDay).inDays >= 7) {
           _selectedDays.add(selectedDay);
+        } else {
+          Future.delayed(Duration(milliseconds: 300), () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Конечная дата должна быть не менее 7 дней после начальной даты',
+                ),
+              ),
+            );
+          });
         }
+      } else if (_selectedDays.length == 2) {
+        _selectedDays
+          ..clear()
+          ..add(selectedDay);
       }
     });
   }
@@ -64,11 +79,8 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
         sortedSelectedDays.isEmpty
             ? 'Выберите дату'
             : sortedSelectedDays.length == 1
-            ? sortedSelectedDays.first
-                .formatDate() // Только startDate
-            : sortedSelectedDays
-                .map((date) => date.formatDate())
-                .join(' - '); // startDate - endDate
+            ? sortedSelectedDays.first.formatDate()
+            : sortedSelectedDays.map((date) => date.formatDate()).join(' - ');
 
     return AppInputWidget(
       filledColor: Colors.white,
@@ -94,7 +106,7 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        height: 470,
+        height: 500,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -103,27 +115,29 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            Expanded(
-              child: CustomCalendarWidget(
-                isClickable: true,
-                selectedDays: _selectedDays,
-                onDaySelected: _onDaySelected,
-              ),
+            CustomCalendarWidget(
+              isClickable: true,
+              selectedDays: _selectedDays,
+              onDaySelected: _onDaySelected,
             ),
+            const SizedBox(height: 10),
             AppButtonWidget(
               title: 'Выбрать',
               onTap: () {
                 if (_selectedDays.isNotEmpty) {
                   final sortedDays = _selectedDays.toList()..sort();
-                  final selectedRange = DateTimeRange(
-                    start: sortedDays[0], // startDate
-                    end:
-                        sortedDays.length > 1
-                            ? sortedDays[1]
-                            : sortedDays[0], // endDate, если выбран
+
+                  // Get the start date
+                  final startDate = sortedDays[0];
+
+                  // Get the end date only if there is a second date selected
+                  final endDate = sortedDays.length > 1 ? sortedDays[1] : null;
+
+                  context.read<EventCubit>().getEvents(
+                    startDate: startDate,
+                    endDate: endDate,
                   );
 
-                  widget.onDateRangeSelected?.call(selectedRange);
                   Navigator.of(context).pop();
                 }
               },
