@@ -46,25 +46,17 @@ class _CalendarDialogWidgetState extends State<CalendarDialogWidget> {
         final startDay = _selectedDays.first;
 
         if (selectedDay.isBefore(startDay)) {
+          // Если выбрали дату раньше первой — меняем местами
           _selectedDays
             ..clear()
-            ..add(selectedDay);
-        } else if (selectedDay.isAtSameMomentAs(startDay)) {
-          // No change
-        } else if (selectedDay.difference(startDay).inDays >= 7) {
-          _selectedDays.add(selectedDay);
+            ..add(selectedDay)
+            ..add(startDay);
         } else {
-          Future.delayed(Duration(milliseconds: 300), () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Конечная дата должна быть не менее 7 дней после начальной даты',
-                ),
-              ),
-            );
-          });
+          // Добавляем конечную дату
+          _selectedDays.add(selectedDay);
         }
-      } else if (_selectedDays.length == 2) {
+      } else {
+        // Если уже 2 даты выбраны, очищаем и начинаем заново
         _selectedDays
           ..clear()
           ..add(selectedDay);

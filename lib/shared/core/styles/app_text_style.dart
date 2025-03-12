@@ -17,9 +17,10 @@ class AppTextStyle {
   );
 
   static const mediumBlack = TextStyle(
-      fontSize: AppFontSize.medium,
-      color: AppColors.black,
-      fontWeight: FontWeight.normal);
+    fontSize: AppFontSize.medium,
+    color: AppColors.black,
+    fontWeight: FontWeight.normal,
+  );
 
   static const largeBlack = TextStyle(
     fontSize: AppFontSize.large,
@@ -70,9 +71,10 @@ class AppTextStyle {
   );
 
   static const mediumWhite = TextStyle(
-      fontSize: AppFontSize.medium,
-      color: AppColors.white,
-      fontWeight: FontWeight.normal);
+    fontSize: AppFontSize.medium,
+    color: AppColors.white,
+    fontWeight: FontWeight.normal,
+  );
 
   static const largeWhite = TextStyle(
     fontSize: AppFontSize.large,
